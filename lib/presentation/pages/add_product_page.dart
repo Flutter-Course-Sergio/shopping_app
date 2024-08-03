@@ -1,4 +1,4 @@
-import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/product.dart';
@@ -68,9 +68,10 @@ class _AddProductPageState extends State<AddProductPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  final result = await BarcodeScanner.scan();
+                  final result = await FlutterBarcodeScanner.scanBarcode(
+                      '#ff6666', 'Cancelar', false, ScanMode.BARCODE);
                   setState(() {
-                    _barcode = result.rawContent;
+                    _barcode = result;
                   });
                 },
                 child: const Text('Escanear Código de Barras'),

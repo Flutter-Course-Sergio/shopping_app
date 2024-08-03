@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                 _showTotalDialog(total);
               }),
           IconButton(
-            icon: const Icon(Icons.payment),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               productService.deleteAllProducts();
               setState(() {});
