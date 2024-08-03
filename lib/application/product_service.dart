@@ -17,4 +17,12 @@ class ProductService {
   Future<void> deleteAllProducts() async {
     await _repository.deleteAllProducts();
   }
+
+  Future<void> updateProduct(Product product) async {
+    await _repository.updateProduct(product);
+  }
+
+  Future<void> deleteProduct(int productId) async {
+    await _repository.deleteProduct(productId);
+  }
 }

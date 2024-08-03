@@ -23,6 +23,16 @@ class _HomePageState extends State<HomePage> {
             ));
   }
 
+  Future<void> _handleUpdate(Product product) async {
+    await context.read<ProductService>().updateProduct(product);
+    setState(() {});
+  }
+
+  Future<void> _handleDelete(Product product) async {
+    await context.read<ProductService>().deleteProduct(product.id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final productService = context.read<ProductService>();
@@ -38,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (_) => const AddProductPage()));
 
               if (result != null && result is Product) {
-                productService.addProduct(result);
+                await productService.addProduct(result);
                 setState(() {});
               }
             },
@@ -49,13 +59,13 @@ class _HomePageState extends State<HomePage> {
                 final products = await productService.getAllProducts();
                 final total = products.fold(
                     0.0, (sum, item) => sum + (item.price * item.quantity));
-
                 _showTotalDialog(total);
+                setState(() {});
               }),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () {
-              productService.deleteAllProducts();
+            onPressed: () async {
+              await productService.deleteAllProducts();
               setState(() {});
             },
           )
@@ -71,7 +81,11 @@ class _HomePageState extends State<HomePage> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text('Lista vacía'));
             } else {
-              return ProductList(products: snapshot.data!);
+              return ProductList(
+                products: snapshot.data!,
+                onUpdate: _handleUpdate,
+                onDelete: _handleDelete,
+              );
             }
           }),
     );
