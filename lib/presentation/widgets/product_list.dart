@@ -90,7 +90,8 @@ class ProductList extends StatelessWidget {
               CustomTextFormField(
                 controller: quantityController,
                 label: 'Cantidad',
-                keyboardType: TextInputType.number,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, ingrese una cantidad';
@@ -137,7 +138,7 @@ class ProductList extends StatelessWidget {
                 final updatedProduct = Product()
                   ..id = product.id
                   ..name = nameController.text
-                  ..quantity = int.parse(quantityController.text)
+                  ..quantity = double.parse(quantityController.text)
                   ..price = double.parse(priceController.text)
                   ..barcode = product.barcode;
 

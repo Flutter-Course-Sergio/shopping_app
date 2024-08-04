@@ -35,7 +35,7 @@ const ProductSchema = CollectionSchema(
     r'quantity': PropertySchema(
       id: 3,
       name: r'quantity',
-      type: IsarType.long,
+      type: IsarType.double,
     )
   },
   estimateSize: _productEstimateSize,
@@ -77,7 +77,7 @@ void _productSerialize(
   writer.writeString(offsets[0], object.barcode);
   writer.writeString(offsets[1], object.name);
   writer.writeDouble(offsets[2], object.price);
-  writer.writeLong(offsets[3], object.quantity);
+  writer.writeDouble(offsets[3], object.quantity);
 }
 
 Product _productDeserialize(
@@ -91,7 +91,7 @@ Product _productDeserialize(
   object.id = id;
   object.name = reader.readString(offsets[1]);
   object.price = reader.readDouble(offsets[2]);
-  object.quantity = reader.readLong(offsets[3]);
+  object.quantity = reader.readDouble(offsets[3]);
   return object;
 }
 
@@ -109,7 +109,7 @@ P _productDeserializeProp<P>(
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -595,46 +595,54 @@ extension ProductQueryFilter
   }
 
   QueryBuilder<Product, Product, QAfterFilterCondition> quantityEqualTo(
-      int value) {
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'quantity',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Product, Product, QAfterFilterCondition> quantityGreaterThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'quantity',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Product, Product, QAfterFilterCondition> quantityLessThan(
-    int value, {
+    double value, {
     bool include = false,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'quantity',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Product, Product, QAfterFilterCondition> quantityBetween(
-    int lower,
-    int upper, {
+    double lower,
+    double upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -643,6 +651,7 @@ extension ProductQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -822,7 +831,7 @@ extension ProductQueryProperty
     });
   }
 
-  QueryBuilder<Product, int, QQueryOperations> quantityProperty() {
+  QueryBuilder<Product, double, QQueryOperations> quantityProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'quantity');
     });

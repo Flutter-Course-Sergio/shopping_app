@@ -7,7 +7,7 @@ class Product {
   Id id = Isar.autoIncrement;
 
   late String name;
-  late int quantity;
+  late double quantity;
   late double price;
   late String? barcode;
 }

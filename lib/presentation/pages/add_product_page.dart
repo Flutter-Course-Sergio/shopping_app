@@ -105,7 +105,7 @@ class _AddProductPageState extends State<AddProductPage> {
                             if (_formKey.currentState!.validate()) {
                               final product = Product()
                                 ..name = _nameController.text
-                                ..quantity = int.parse(_quantityController.text)
+                                ..quantity = double.parse(_quantityController.text)
                                 ..price = double.parse(_priceController.text)
                                 ..barcode = _barcode;
 
