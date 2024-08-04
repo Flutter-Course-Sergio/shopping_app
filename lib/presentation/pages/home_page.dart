@@ -19,7 +19,24 @@ class _HomePageState extends State<HomePage> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              content: Text('Total: \$${total.toStringAsFixed(2)}'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Total:',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    '\$${total.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ));
   }
 
@@ -81,10 +98,13 @@ class _HomePageState extends State<HomePage> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text('Lista vacía'));
             } else {
-              return ProductList(
-                products: snapshot.data!,
-                onUpdate: _handleUpdate,
-                onDelete: _handleDelete,
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: ProductList(
+                  products: snapshot.data!,
+                  onUpdate: _handleUpdate,
+                  onDelete: _handleDelete,
+                ),
               );
             }
           }),
